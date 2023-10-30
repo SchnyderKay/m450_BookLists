@@ -1,4 +1,5 @@
 using BookLibrary;
+using NUnit.Framework;
 
 namespace TestProject
 {
@@ -19,7 +20,6 @@ namespace TestProject
             var result = library.AddBook("testList", "testBook", "testAuthor", 353, 1999, "Reading");
 
             Assert.True(result);
-           
         }
 
         [Test]
@@ -31,7 +31,6 @@ namespace TestProject
             Assert.True(result);
         }
 
-        
         [Test]
         public void TestGetBook()
         {
