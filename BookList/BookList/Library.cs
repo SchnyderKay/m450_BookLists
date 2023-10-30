@@ -11,7 +11,7 @@ namespace BookLibrary
     {
         private List<BookList> bookLists = new();
 
-        public bool NewBookList(string name, string creator)
+        public bool NewBookList(string name, string? creator)
         {
             BookList bookList = new BookList(name, creator);
 
@@ -80,7 +80,17 @@ namespace BookLibrary
 
         public BookList GetBookList(string listName)
         {
-            return bookLists.First(x => x.GetName().Equals(listName));
+            if (bookLists.Count > 0)
+            {
+                return bookLists.First(x => x.GetName().Equals(listName));
+            }
+
+            return null;
+        }
+
+        public List<BookList> GetBookLists()
+        {
+            return bookLists;
         }
     }
 }
