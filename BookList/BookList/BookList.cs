@@ -9,11 +9,11 @@ namespace BookLibrary
     public class BookList
     {
         private string Name;
-        private string Creator;
+        private string? Creator;
         private List<Book> Books = new();
 
 
-        public BookList(string name, string creator)
+        public BookList(string name, string? creator)
         {
             Name = name;
             Creator = creator;
@@ -67,7 +67,7 @@ namespace BookLibrary
             return Name;
         }
 
-        public string GetCreator()
+        public string? GetCreator()
         {
             return Creator;
         }

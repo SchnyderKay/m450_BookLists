@@ -59,7 +59,7 @@ namespace TestProject
             library.AddBook("test", "book3", "author3", 1999, 1, "Finsihed");
             library.AddBook("test", "book4", "author4", 1999, 1, "Dropped");
 
-            List<Book> result = library.GetBookList("test").GetBooks();           
+            List<Book> result = library.GetBookList("test").GetBooks();
         }
 
         [Test]
