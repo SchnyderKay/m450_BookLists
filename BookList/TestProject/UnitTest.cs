@@ -11,7 +11,7 @@ public class Tests
     public void Setup()
     {
         library = new Library();
-        library.NewBookList("testList", "admin");
+        library.AddBookList("testList", "admin");
     }
 
     [Test]
@@ -57,7 +57,7 @@ public class Tests
             new Book("book4", "author4", 1999, 1, "Dropped")
         };
 
-        library.NewBookList("test", "author");
+        library.AddBookList("test", "author");
 
         library.AddBook("test", "book1", "author1", 1999, 1, "Reading");
         library.AddBook("test", "book2", "author2", 1999, 1, "Unknown");
@@ -75,7 +75,7 @@ public class Tests
     [Test]
     public void TestAddList()
     {
-        library.NewBookList("test", "admin");
+        library.AddBookList("test", "admin");
 
         BookList expected = new("test", "admin");
 
@@ -104,9 +104,9 @@ public class Tests
             new BookList("test3", "user3")
         };
 
-        library.NewBookList("test1", "user1");
-        library.NewBookList("test2", "user2");
-        library.NewBookList("test3", "user3");
+        library.AddBookList("test1", "user1");
+        library.AddBookList("test2", "user2");
+        library.AddBookList("test3", "user3");
 
         List<BookList> results = library.GetBookLists();
 

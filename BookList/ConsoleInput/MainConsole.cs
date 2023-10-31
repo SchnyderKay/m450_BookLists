@@ -4,8 +4,14 @@ namespace ConsoleInput;
 
 public class BookLibraryMain
 {
+    /// <summary>
+    /// Library for session
+    /// </summary>
     public Library Library = new();
 
+    /// <summary>
+    /// Start point for user
+    /// </summary>
     public static void Main()
     {
         BookLibraryMain main = new();
@@ -62,6 +68,9 @@ public class BookLibraryMain
         }
     }
 
+    /// <summary>
+    /// Console inputs to add List
+    /// </summary>
     public void AddList()
     {
         Console.WriteLine("----------------------------------------------------------");
@@ -72,7 +81,7 @@ public class BookLibraryMain
         Console.WriteLine("Whats your name?");
         string creator = Console.ReadLine()!;
 
-        if (Library.NewBookList(name, creator))
+        if (Library.AddBookList(name, creator))
         {
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.WriteLine("List {0} by {1} successfully created", name, creator);
@@ -86,6 +95,9 @@ public class BookLibraryMain
         }
     }
 
+    /// <summary>
+    /// Console inputs to remove List
+    /// </summary>
     public void RemoveList()
     {
         Console.WriteLine("----------------------------------------------------------");
@@ -107,6 +119,9 @@ public class BookLibraryMain
         }
     }
 
+    /// <summary>
+    /// Console inputs to change name of list
+    /// </summary>
     public void ChangeListName()
     {
         Console.WriteLine("----------------------------------------------------------");
@@ -131,6 +146,9 @@ public class BookLibraryMain
         }
     }
 
+    /// <summary>
+    /// Console input to add book
+    /// </summary>
     public void AddBook()
     {
         Console.WriteLine("----------------------------------------------------------");
@@ -175,6 +193,9 @@ public class BookLibraryMain
         }
     }
 
+    /// <summary>
+    /// Console inputs to remove books
+    /// </summary>
     public void RemoveBook()
     {
         Console.WriteLine("----------------------------------------------------------");
@@ -199,6 +220,9 @@ public class BookLibraryMain
         }
     }
 
+    /// <summary>
+    /// Console inputs to change read status of book
+    /// </summary>
     public void ChangeReadStatus()
     {
         Console.WriteLine("----------------------------------------------------------");
@@ -215,6 +239,9 @@ public class BookLibraryMain
         Library.ChangeReadStatus(readStatus, listName, bookName);
     }
 
+    /// <summary>
+    /// Console inputs to get books from list
+    /// </summary>
     public void GetBooksFromList()
     {
         Console.WriteLine("----------------------------------------------------------");
@@ -241,6 +268,9 @@ public class BookLibraryMain
         }
     }
 
+    /// <summary>
+    /// Console inputs to get book by name
+    /// </summary>
     public void GetBook()
     {
         Console.WriteLine("----------------------------------------------------------");
@@ -263,6 +293,9 @@ public class BookLibraryMain
             book.GetReadingStatus());
     }
 
+    /// <summary>
+    /// Console inputs to get all lists
+    /// </summary>
     public void GetLists()
     {
         Console.WriteLine("----------------------------------------------------------");
