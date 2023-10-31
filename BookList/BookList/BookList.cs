@@ -1,80 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BookLibrary
+﻿namespace BookLibrary;
+public class BookList
 {
-    public class BookList
+    private string name;
+    private readonly string creator;
+    private readonly List<Book> books = new();
+
+    public BookList(string name, string creator)
     {
-        private string Name;
-        private string? Creator;
-        private List<Book> Books = new();
+        this.name = name;
+        this.creator = creator;
+    }
 
+    public bool AddBook(string bookName, string author, int publishedYear, int pages, string readingStatus)
+    {
+        Book book = new(bookName, author, publishedYear, pages, readingStatus);
 
-        public BookList(string name, string? creator)
+        if (books.Any(existingBook => existingBook.GetName() == name))
         {
-            Name = name;
-            Creator = creator;
+            return false;
         }
 
-        public bool AddBook(string name, string author, int publishedYear, int pages, string readingStatus)
-        {
-            Book book = new(name, author, publishedYear, pages, readingStatus);
+        books.Add(book);
 
-            foreach (Book existingBook in Books)
-            {
-                if (existingBook.GetName() == name)
-                {
-                    return false;
-                }
-            }
-            Books.Add(book);
+        return books.Contains(book);
+    }
 
-            return Books.Contains(book);
-        }
+    public bool RemoveBook(string bookName)
+    {
+        Book book = books.FirstOrDefault(x => x.GetName().Equals(bookName))!;
 
-        public bool RemoveBook(string name)
-        {
-            Book book = Books.FirstOrDefault(x => x.GetName().Equals(name));
+        books.Remove(book);
 
-            Books.Remove(book);
+        return !books.Contains(book);
+    }
 
-            return !Books.Contains(book);
-        }
+    public Book GetBookByName(string bookName)
+    {
+        return books.FirstOrDefault(x => x.GetName().Equals(bookName))!;
+    }
 
-        public Book GetBookByName(string name)
-        {
-            return Books.FirstOrDefault(x => x.GetName().Equals(name));
-        }
+    public void ChangeReadStatus(string bookName, string readingStatus)
+    {
+        Book book = books.FirstOrDefault(x => x.GetName().Equals(bookName))!;
 
-        public void ChangeReadStatus(string name, string readingStatus)
-        {
-            Book book = Books.FirstOrDefault(x => x.GetName().Equals(name));
+        book.ChangeReadStatus(readingStatus);
+    }
 
-            book.ChangeReadStatus(readingStatus);
-        }
+    public void ChangeName(string newName)
+    {
+        name = newName;
+    }
 
-        public void ChangeName(string name)
-        {
-            Name = name;
-        }
+    public string GetName()
+    {
+        return name;
+    }
 
+    public string GetCreator()
+    {
+        return creator;
+    }
 
-        public string GetName()
-        {
-            return Name;
-        }
-
-        public string? GetCreator()
-        {
-            return Creator;
-        }
-
-        public List<Book> GetBooks()
-        {
-            return Books;
-        }
+    public List<Book> GetBooks()
+    {
+        return books;
     }
 }

@@ -1,75 +1,72 @@
-﻿namespace BookLibrary
+﻿namespace BookLibrary;
+
+public class Book
 {
-    public class Book
+    private readonly string name;
+    private readonly string author;
+    private readonly int publishedYear;
+    private readonly int pages;
+    private Status readStatus;
+    private enum Status
     {
-        private string Name;
-        private string Author;
-        private int PublishedYear;
-        private int Pages;
-        private Status ReadStatus;
-        private enum Status
+        Reading,
+        Dropped,
+        Pending,
+        Finished,
+        Unknown
+    }
+
+    public Book(string name, string author, int publishedYear, int pages, string readingStatus)
+    {
+        this.name = name;
+        this.author = author;
+        this.publishedYear = publishedYear;
+        this.pages = pages;
+
+        readStatus = readingStatus switch
         {
-            Reading,
-            Dropped,
-            Pending,
-            Finished,
-            Unknown
-        }
+            "Reading" => Status.Reading,
+            "Dropped" => Status.Dropped,
+            "Pending" => Status.Pending,
+            "Finished" => Status.Finished,
+            _ => Status.Unknown
+        };
+    }
 
-        public Book(string name, string author, int publishedYear, int pages, string readingStatus)
+    public void ChangeReadStatus(string readingStatus)
+    {
+        readStatus = readingStatus switch
         {
-            Name = name;
-            Author = author;
-            PublishedYear = publishedYear;
-            Pages = pages;
+            "Reading" => Status.Reading,
+            "Dropped" => Status.Dropped,
+            "Pending" => Status.Pending,
+            "Finished" => Status.Finished,
+            _ => Status.Unknown
+        };
+    }
 
-            ReadStatus = readingStatus switch
-            {
-                "Reading" => Status.Reading,
-                "Dropped" => Status.Dropped,
-                "Pending" => Status.Pending,
-                "Finished" => Status.Finished,
-                _ => Status.Unknown,
-            };
-        }
+    public string GetName()
+    {
+        return name;
+    }
 
+    public string GetAuthor()
+    {
+        return author;
+    }
 
-        public void ChangeReadStatus(string readingStatus)
-        {
-            ReadStatus = readingStatus switch
-            {
-                "Reading" => Status.Reading,
-                "Dropped" => Status.Dropped,
-                "Pending" => Status.Pending,
-                "Finished" => Status.Finished,
-                _ => Status.Unknown,
-            };
-        }
+    public int GetPublishedYear()
+    {
+        return publishedYear;
+    }
 
-        public string GetName()
-        {
-            return Name;
-        }
+    public int GetPages()
+    {
+        return pages;
+    }
 
-        public string GetAuthor()
-        {
-            return Author;
-        }
-
-        public int GetPublishedYear()
-        {
-            return PublishedYear;
-        }
-
-        public int GetPages()
-        {
-            return Pages;
-        }
-
-        public string GetReadingStatus()
-        {
-            return ReadStatus.ToString();
-        }
-
+    public string GetReadingStatus()
+    {
+        return readStatus.ToString();
     }
 }

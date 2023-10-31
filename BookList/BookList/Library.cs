@@ -1,96 +1,75 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-
-namespace BookLibrary
+﻿namespace BookLibrary;
+public class Library
 {
-    public class Library
+    private readonly List<BookList> bookLists = new();
+
+    public bool NewBookList(string name, string creator)
     {
-        private List<BookList> bookLists = new();
+        BookList bookList = new(name, creator);
 
-        public bool NewBookList(string name, string? creator)
+        if (bookLists.Any(existingList => existingList.GetName() == name))
         {
-            BookList bookList = new BookList(name, creator);
-
-            foreach (BookList existingList in bookLists)
-            {
-                if (existingList.GetName() == name)
-                {
-                    return false;
-                }
-            }
-
-            bookLists.Add(bookList);
-            return bookLists.Contains(bookList);
+            return false;
         }
 
-        public bool RemoveBookList(string name)
-        {
-            BookList bookList = bookLists.Where(x => x.GetName() == name).First();
-            bookLists.Remove(bookList);
+        bookLists.Add(bookList);
+        return bookLists.Contains(bookList);
+    }
 
-            return !bookLists.Contains(bookList);
-        }
+    public bool RemoveBookList(string name)
+    {
+        BookList bookList = bookLists.First(x => x.GetName() == name);
+        bookLists.Remove(bookList);
 
-        public bool ChangeListName(string oldName, string newName)
-        {
-            BookList bookList = bookLists.Where(x => x.GetName() == oldName).First();
+        return !bookLists.Contains(bookList);
+    }
 
-            bookList.ChangeName(newName);
+    public bool ChangeListName(string oldName, string newName)
+    {
+        BookList bookList = bookLists.First(x => x.GetName() == oldName);
 
-            return bookLists.Contains(bookList);
-        }
+        bookList.ChangeName(newName);
 
-        public bool AddBook(string listName, string name, string author, int pages, int publishingYear, string readingStatus)
-        {
-            BookList list = bookLists.First(x => x.GetName() == listName);
+        return bookLists.Contains(bookList);
+    }
 
-            list.AddBook(name, author, pages, publishingYear, readingStatus);
+    public bool AddBook(string listName, string name, string author, int pages, int publishingYear, string readingStatus)
+    {
+        BookList list = bookLists.First(x => x.GetName() == listName);
 
-            return true;
-        }
+        list.AddBook(name, author, pages, publishingYear, readingStatus);
 
-        public bool RemoveBook(string listName, string bookName)
-        {
-            BookList list = bookLists.First(x => x.GetName().Equals(listName));
+        return true;
+    }
 
-            return list.RemoveBook(bookName);
-        }
+    public bool RemoveBook(string listName, string bookName)
+    {
+        BookList list = bookLists.First(x => x.GetName().Equals(listName));
 
-        public void ChangeReadStatus(string readStatus, string listName, string bookName)
-        {
-            BookList list = bookLists.First(x => x.GetName().Equals(listName));
+        return list.RemoveBook(bookName);
+    }
 
-            list.ChangeReadStatus(bookName, readStatus);
-        }
+    public void ChangeReadStatus(string readStatus, string listName, string bookName)
+    {
+        BookList list = bookLists.First(x => x.GetName().Equals(listName));
 
-        public Book GetBook(string bookName)
-        {
-            List<Book> book = new();
-            foreach (BookList list in bookLists)
-            {
-                book.Add(list.GetBookByName(bookName));
-            }
+        list.ChangeReadStatus(bookName, readStatus);
+    }
 
-            return book.First();
-        }
+    public Book GetBook(string bookName)
+    {
+        List<Book> book = bookLists.Select(list => list.GetBookByName(bookName)).ToList();
 
-        public BookList GetBookList(string listName)
-        {
-            if (bookLists.Count > 0)
-            {
-                return bookLists.First(x => x.GetName().Equals(listName));
-            }
+        return book.First();
+    }
 
-            return null;
-        }
+    public BookList GetBookList(string listName)
+    {
+        return bookLists.Count > 0 ? bookLists.First(x => x.GetName().Equals(listName)) : null!;
+    }
 
-        public List<BookList> GetBookLists()
-        {
-            return bookLists;
-        }
+    public List<BookList> GetBookLists()
+    {
+        return bookLists;
     }
 }
