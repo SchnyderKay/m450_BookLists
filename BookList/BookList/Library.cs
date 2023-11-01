@@ -29,7 +29,12 @@ namespace BookLibrary
 
         public bool RemoveBookList(string name)
         {
-            BookList bookList = bookLists.Where(x => x.GetName() == name).First();
+            if (!bookLists.Exists(x => x.GetName() == name))
+            {
+                return false;
+            }
+
+            BookList bookList = bookLists.Find(x => x.GetName() == name)!;
             bookLists.Remove(bookList);
 
             return !bookLists.Contains(bookList);
@@ -37,37 +42,72 @@ namespace BookLibrary
 
         public bool ChangeListName(string oldName, string newName)
         {
-            BookList bookList = bookLists.Where(x => x.GetName() == oldName).First();
+            if (bookLists.Exists(x => x.GetName() == newName) || !bookLists.Exists(x => x.GetName() == oldName))
+            {
+                return false;
+            }
+
+            BookList bookList = bookLists.Find(x => x.GetName() == oldName)!;
 
             bookList.ChangeName(newName);
 
             return bookLists.Contains(bookList);
         }
 
-        public bool AddBook(string listName, string name, string author, int pages, int publishingYear, string readingStatus)
+        public bool AddBook(string listName, string bookName, string author, int pages, int publishingYear, string readingStatus)
         {
-            BookList list = bookLists.First(x => x.GetName() == listName);
+            if (!bookLists.Exists(x => x.GetName() == listName))
+            {
+                return false;
+            }
 
-            list.AddBook(name, author, pages, publishingYear, readingStatus);
+            BookList list = bookLists.Find(x => x.GetName() == listName)!;
+
+            if (list.GetBooks().Exists(x => x.GetName() == bookName))
+            {
+                return false;
+            }
+
+            list.AddBook(bookName, author, pages, publishingYear, readingStatus);
 
             return true;
         }
 
         public bool RemoveBook(string listName, string bookName)
         {
-            BookList list = bookLists.First(x => x.GetName().Equals(listName));
+            if (!bookLists.Exists(x => x.GetName() == listName))
+            {
+                return false;
+            }
+
+            BookList list = bookLists.Find(x => x.GetName().Equals(listName))!;
+
+            if (!list.GetBooks().Exists(x => x.GetName() == bookName))
+            {
+                return false;
+            }
 
             return list.RemoveBook(bookName);
         }
 
         public void ChangeReadStatus(string readStatus, string listName, string bookName)
         {
-            BookList list = bookLists.First(x => x.GetName().Equals(listName));
+            if (!bookLists.Exists(x => x.GetName() == listName))
+            {
+                return;
+            }
+
+            BookList list = bookLists.Find(x => x.GetName().Equals(listName))!;
+
+            if (!list.GetBooks().Exists(x => x.GetName() == bookName))
+            {
+                return;
+            }
 
             list.ChangeReadStatus(bookName, readStatus);
         }
 
-        public Book GetBook(string bookName)
+        public List<Book> GetBook(string bookName)
         {
             List<Book> book = new();
             foreach (BookList list in bookLists)
@@ -75,17 +115,24 @@ namespace BookLibrary
                 book.Add(list.GetBookByName(bookName));
             }
 
-            return book.First();
+            return book;
+        }
+
+        public Book GetBookFromList(string listName, string bookName)
+        {
+            if (bookLists.Exists(x => x.GetName() == listName))
+            {
+                BookList list = bookLists.Find(x => x.GetName() == listName)!;
+
+                return list.GetBookByName(bookName);
+            }
+
+            return null!;
         }
 
         public BookList GetBookList(string listName)
         {
-            if (bookLists.Count > 0)
-            {
-                return bookLists.First(x => x.GetName().Equals(listName));
-            }
-
-            return null;
+            return bookLists.Find(x => x.GetName().Equals(listName))!;
         }
 
         public List<BookList> GetBookLists()

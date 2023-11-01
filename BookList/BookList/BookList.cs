@@ -19,25 +19,17 @@ namespace BookLibrary
             Creator = creator;
         }
 
-        public bool AddBook(string name, string author, int publishedYear, int pages, string readingStatus)
+        public bool AddBook(string bookName, string author, int publishedYear, int pages, string readingStatus)
         {
-            Book book = new(name, author, publishedYear, pages, readingStatus);
-
-            foreach (Book existingBook in Books)
-            {
-                if (existingBook.GetName() == name)
-                {
-                    return false;
-                }
-            }
+            Book book = new(bookName, author, publishedYear, pages, readingStatus);
             Books.Add(book);
 
             return Books.Contains(book);
         }
 
-        public bool RemoveBook(string name)
+        public bool RemoveBook(string bookName)
         {
-            Book book = Books.FirstOrDefault(x => x.GetName().Equals(name));
+            Book book = Books.Find(x => x.GetName().Equals(bookName))!;
 
             Books.Remove(book);
 
@@ -46,12 +38,12 @@ namespace BookLibrary
 
         public Book GetBookByName(string name)
         {
-            return Books.FirstOrDefault(x => x.GetName().Equals(name));
+            return Books.Find(x => x.GetName().Equals(name))!;
         }
 
         public void ChangeReadStatus(string name, string readingStatus)
         {
-            Book book = Books.FirstOrDefault(x => x.GetName().Equals(name));
+            Book book = Books.Find(x => x.GetName().Equals(name))!;
 
             book.ChangeReadStatus(readingStatus);
         }
