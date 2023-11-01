@@ -257,19 +257,23 @@ namespace BookLibrary
             Console.WriteLine("Whats the name of the book?");
             string bookName = Console.ReadLine();
 
-            Book book = Library.GetBook(bookName);
+            List<Book> books = Library.GetBook(bookName);
 
-            Console.WriteLine("--------------------------");
-            Console.WriteLine("{0} \n" +
-                              "Author: {1} \n" +
-                              "Pages: {2} \n" +
-                              "Published year: {3} \n" +
-                              "Read Status: {4} \n",
-                              book.GetName(),
-                              book.GetAuthor(),
-                              book.GetPages(),
-                              book.GetPublishedYear(),
-                              book.GetReadingStatus());
+            foreach (Book book in books)
+            {
+                Console.WriteLine("--------------------------");
+                Console.WriteLine("{0} \n" +
+                                  "Author: {1} \n" +
+                                  "Pages: {2} \n" +
+                                  "Published year: {3} \n" +
+                                  "Read Status: {4} \n",
+                    book.GetName(),
+                    book.GetAuthor(),
+                    book.GetPages(),
+                    book.GetPublishedYear(),
+                    book.GetReadingStatus());
+
+            }
         }
 
 

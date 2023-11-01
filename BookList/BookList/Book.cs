@@ -16,7 +16,7 @@
             Unknown
         }
 
-        public Book(string name, string author, int publishedYear, int pages, string readingStatus)
+        public Book(string name, string author, int pages, int publishedYear, string readingStatus)
         {
             Name = name;
             Author = author;

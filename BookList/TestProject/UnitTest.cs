@@ -23,6 +23,24 @@ namespace TestProject
         }
 
         [Test]
+        public void TestFailAddBookBookExists()
+        {
+            library.AddBook("testList", "testBook", "testAuthor", 353, 1999, "Reading");
+            var result = library.AddBook("testList", "testBook", "testAuthor", 353, 1999, "Reading");
+
+            Assert.False(result);
+        }
+
+        [Test]
+        public void TestFailAddBookListNotFound()
+        {
+            var result = library.AddBook("test1", "testBook", "testAuthor", 353, 1999, "Reading");
+
+            Assert.False(result);
+        }
+
+
+        [Test]
         public void TestRemoveBook()
         {
             library.AddBook("testList", "testBook", "testAuthor", 353, 1999, "Reading");
@@ -32,18 +50,54 @@ namespace TestProject
         }
 
         [Test]
-        public void TestGetBook()
+        public void TestFailRemoveBookListNotFound()
+        {
+            var result = library.RemoveBook("test", "testBook");
+
+            Assert.False(result);
+        }
+
+        [Test]
+        public void TestFailRemoveBookBookNotFound()
+        {
+            var result = library.RemoveBook("testList", "test");
+
+            Assert.False(result);
+        }
+
+        [Test]
+        public void TestGetBookFromList()
         {
             library.AddBook("testList", "testBook", "testAuthor", 353, 1999, "Reading");
-            Book expected = new("testBook", "testAuthor", 353, 1999, "Reading");
 
-            Book result = library.GetBook("testBook");
+            Book result = library.GetBookFromList("testList", "testBook");
 
-            Assert.AreEqual(expected.GetName(), result.GetName());
-            Assert.AreEqual(expected.GetAuthor(), result.GetAuthor());
-            Assert.AreEqual(expected.GetPages(), result.GetPages());
-            Assert.AreEqual(expected.GetPublishedYear(), result.GetPublishedYear());
-            Assert.AreEqual(expected.GetReadingStatus(), result.GetReadingStatus());
+            Assert.AreEqual("testBook", result.GetName());
+            Assert.AreEqual("testAuthor", result.GetAuthor());
+            Assert.AreEqual(353, result.GetPages());
+            Assert.AreEqual(1999, result.GetPublishedYear());
+            Assert.AreEqual( "Reading", result.GetReadingStatus());
+        }
+
+        [Test]
+        public void TestGetBookByName()
+        {
+            library.NewBookList("testList2", "admin");
+            library.AddBook("testList", "testBook", "testAuthor", 353, 1999, "Reading");
+            library.AddBook("testList2", "testBook", "testAuthor", 353, 1999, "Reading");
+
+            List<Book> books = library.GetBook("testBook");
+
+            Assert.AreEqual(books.Count(), 2);
+
+            foreach (Book book in books)
+            {
+                Assert.AreEqual("testBook", book.GetName());
+                Assert.AreEqual("testAuthor", book.GetAuthor());
+                Assert.AreEqual(353, book.GetPages());
+                Assert.AreEqual(1999, book.GetPublishedYear());
+                Assert.AreEqual("Reading", book.GetReadingStatus());
+            }
         }
 
         [Test]
@@ -82,6 +136,13 @@ namespace TestProject
             Assert.That(result.GetName(), Is.EqualTo(expected.GetName()));
         }
 
+        [Test]
+        public void TestFailAddList()
+        {
+            bool result = library.NewBookList("testList", "admin");
+
+            Assert.False(result);
+        }
 
         [Test]
         public void TestRemoveList()
@@ -89,6 +150,15 @@ namespace TestProject
             var result = library.RemoveBookList("testList");
 
             Assert.True(result);
+            Assert.True(!library.GetBookLists().Exists(x => x.GetName() == "testList"));
+        }
+
+        [Test]
+        public void TestFailRemoveList()
+        {
+            var result = library.RemoveBookList("");
+
+            Assert.False(result);
         }
 
         [Test]
@@ -114,13 +184,34 @@ namespace TestProject
         }
 
         [Test]
+        public void TestGetList()
+        {
+            library = new Library();
+
+            library.NewBookList("test1", "user1");
+
+            BookList result = library.GetBookList("test1");
+
+            Assert.AreEqual("test1", result.GetName());
+            Assert.AreEqual("user1", result.GetCreator());
+        }
+
+        [Test]
         public void TestChangeListName()
         {
             var result = library.ChangeListName("testList", "test1");
 
             Assert.True(result);
+            Assert.True(library.GetBookList("test1").GetName() == "test1");
         }
 
+        [Test]
+        public void TestFailChangeListName()
+        {
+            var result = library.ChangeListName("testList", "testList");
+
+            Assert.False(result);
+        }
 
         [Test]
         public void TestChangeReadStatus()
@@ -130,7 +221,29 @@ namespace TestProject
             library.AddBook("testList", "test1", "admin", 157, 1999, "Finished");
             library.ChangeReadStatus(testStatus, "testList", "test1");
 
-            Assert.AreEqual(testStatus, library.GetBook("test1").GetReadingStatus());
+            Assert.AreEqual(testStatus, library.GetBookFromList("testList","test1").GetReadingStatus());
+        }
+
+        [Test]
+        public void TestFailChangeReadStatusBookNotFound()
+        {
+            string testStatus = "Dropped";
+
+            library.AddBook("testList", "test1", "admin", 157, 1999, "Finished");
+            library.ChangeReadStatus(testStatus, "testList", "test");
+
+            Assert.AreNotEqual(testStatus, library.GetBookFromList("testList", "test1").GetReadingStatus());
+        }
+
+        [Test]
+        public void TestFailChangeReadStatusListNotFound()
+        {
+            string testStatus = "Dropped";
+
+            library.AddBook("testList", "test1", "admin", 157, 1999, "Finished");
+            library.ChangeReadStatus(testStatus, "test", "test1");
+
+            Assert.AreNotEqual(testStatus, library.GetBookFromList("testList", "test1").GetReadingStatus());
         }
     }
 }
